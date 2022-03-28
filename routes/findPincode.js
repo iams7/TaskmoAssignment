@@ -40,10 +40,10 @@ router.get("/", async (req, res) => {
                 const db = client.db("database2");
                 const pincodes = db.collection("pincodes");
                 pincodes.findOne({ pincode: parseInt(pinCode) }, (err, result) => {
-                    if (err) {
-                        res.json({ message: "user is out of service area" });
+                    if (err || !result?.pincode) {
+                        res.status(404).json({ message: "user is out of service area" });
                     } else {
-                        res.json({ message: "The user is inside the region", pincode: result?.pincode?.toString() });
+                        res.status(200).json({ message: "The user is inside the region", pincode: result?.pincode?.toString() });
                     }
                 });
                 // pincodes.find({ pincode: 587155 }).toArray((err, result) => {
